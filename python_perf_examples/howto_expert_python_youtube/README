@@ -1,0 +1,23 @@
+
+Jist of in-code cProfiler decorator:
+
+def profiler(fn):
+    """
+    Decorator for profiling
+    """
+    def inner(*args, **kwargs):
+        pr = cProfile.Profile()
+        pr.enable()
+        retval = fn(*args, **kwargs)
+        pr.disable()
+        s = io.StringIO()
+        sortby = 'cumulative'
+        ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+        ps.print_stats()
+        print(s.getvalue())
+        return retval
+    return inner
+
+To run on command line:
+python -m cProfile main_fact.python
+
